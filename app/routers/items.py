@@ -37,4 +37,4 @@ async def update_item_endpoint(item_id: int, payload: ItemUpdate):
 @router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_item_endpoint(item_id: int):
     await crud.delete_item(item_id)
-    return None 
+    return None
