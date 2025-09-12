@@ -31,7 +31,7 @@ async def get_item(item_id: int) -> dict:
     item = await prisma.item.find_unique(where={"id": item_id})
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-    return item.dict()
+    return item.model_dump()
 
 
 async def list_items(limit: int = 10, offset: int = 0, title: Optional[str] = None) -> Tuple[int, List[dict]]:
@@ -48,7 +48,7 @@ async def list_items(limit: int = 10, offset: int = 0, title: Optional[str] = No
 
     await prisma.query_raw("SELECT COUNT(*) FROM \"Item\";")
 
-    return total, [r.dict() for r in rows]
+    return total, [r.model_dump() for r in rows]
 
 
 async def update_item(item_id: int, data: ItemUpdate) -> dict:
@@ -64,7 +64,7 @@ async def update_item(item_id: int, data: ItemUpdate) -> dict:
 
     try:
         updated = await prisma.item.update(where={"id": item_id}, data=payload)
-        return updated.dict()
+        return updated.model_dump()
     except Exception as exc:
         if "unique" in str(exc).lower():
             raise HTTPException(
@@ -76,9 +76,9 @@ async def update_item(item_id: int, data: ItemUpdate) -> dict:
 
 async def delete_item(item_id: int) -> None:
     try:
-        await prisma.item.delete(where={"id": item_id})
-    except Exception:
         existing = await prisma.item.find_unique(where={"id": item_id})
         if not existing:
             raise HTTPException(status_code=404, detail="Item not found")
-        raise
+        return await prisma.item.delete(where={"id": item_id})
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to delete item")

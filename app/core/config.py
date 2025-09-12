@@ -1,7 +1,8 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
 from typing import Optional
-
+import dotenv
+dotenv.load_dotenv()
 
 class Settings(BaseSettings):
     database_url: Optional[str] = Field(default=None, alias="DATABASE_URL")

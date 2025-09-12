@@ -6,8 +6,7 @@ A FastAPI application with CRUD operations for an Item resource using Neon Postg
 
 ### Prerequisites
 - Python 3.11+
-- Node.js 18+
-- Neon PostgreSQL database (or any PostgreSQL instance)
+- PostgreSQL database (or any PostgreSQL instance)
 
 ### Installation
 
@@ -18,19 +17,15 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. Install Prisma and generate client:
-```bash
-npm install
-npx prisma generate
-```
-
-3. Setup database:
+2. Setup database:
 ```bash
 # Set your Neon database URL
-export DATABASE_URL="postgresql://username:password@ep-xxx-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require"
-
+create .env from .env.example
+```
+3. Migration
+```bash
 # Apply migrations
-npx prisma migrate dev --name init
+prisma migrate dev
 ```
 
 4. Seed with sample data:
@@ -50,19 +45,6 @@ Visit http://localhost:8000/docs for API documentation.
 ```bash
 docker-compose up --build
 ```
-
-## Database Setup with Neon
-
-1. **Create a Neon account** at [neon.tech](https://neon.tech)
-2. **Create a new project** and get your connection string
-3. **Set the DATABASE_URL** environment variable:
-   ```bash
-   export DATABASE_URL="postgresql://username:password@ep-xxx-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require"
-   ```
-4. **Run migrations** to create the database schema:
-   ```bash
-   npx prisma migrate dev --name init
-   ```
 
 ## API Endpoints
 
@@ -111,6 +93,5 @@ python -m app.seed --count 50 --truncate
 
 Create a `.env` file in the root directory:
 ```env
-DATABASE_URL=postgresql://username:password@ep-xxx-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
-ENVIRONMENT=development
+DATABASE_URL=
 ```
